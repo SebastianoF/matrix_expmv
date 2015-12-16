@@ -1,10 +1,10 @@
 % Some tests to stress the generator of matrix divided by classes
 
-% test 0: to be sure we always can get a matrix for each class!
+% test 0: to be sure we always can get a matrix for each of the first three 
+% classes. For the fourth class we need a different generator.
 
 clear
 close all
-
 
 classes = zeros(1,4);
 

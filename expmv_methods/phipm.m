@@ -32,7 +32,12 @@ function [w, stats] = phipm(t, A, u, tol, symm, m)
 %   stats(3) - number of Krylov steps
 %   stats(4) - number of matrix exponentials
 
-persistent V int
+% NOTE: some blind modifications has been made by Seb. This version it 
+% differs from the original one found online at 
+% http://www1.maths.leeds.ac.uk/~jitse/phipm.m by Jitse Niesen
+% See OLD commented and NEW uncommented.
+
+persistent V int_  % OLD name of this variable was int
 
 % n is the size of the original problem
 % p is the number of phi functions
@@ -56,7 +61,7 @@ if nargin < 6
   m = 10;
   if nargin < 5
     if Aisahandle
-      symm = false
+      symm = false;
     elseif max(full(max(A-A'))) < 100*eps
       symm = true;
     else
@@ -76,14 +81,14 @@ end
 mmax = 100;
 mnew = m; 
 % Preallocate matrices
-if isempty(V) && isempty(int)
+if isempty(V) && isempty(int_)
   V = zeros(n, mmax+1); 
-  int = zeros(n, p);
+  int_ = zeros(n, p);
 elseif numel(V) ~= n*(mmax+1)
   V = zeros(n, mmax+1); 
-  int = zeros(n, p);  
-elseif numel(int) ~= n*p
-  int = zeros(n, p);  
+  int_ = zeros(n, p);  
+elseif numel(int_) ~= n*p
+  int_ = zeros(n, p);  
 end
 
 % Initializing the variables
@@ -139,20 +144,20 @@ while tnow < tout
 
     % Compute the update factors 
     % (the w_j vectors in Section 3.3 of the paper)
-    int(:, 1) = w;
+    int_(:, 1) = w;
     for i = 1:p-1
 
       % Determine if matrix free
       if ~Aisahandle
-        int(:, i+1) = A*int(:, i)+up(:, i+1);
+        int_(:, i+1) = A*int_(:, i)+up(:, i+1);
       else
-        int(:, i+1) = A(int(:, i))+up(:, i+1);
+        int_(:, i+1) = A(int_(:, i))+up(:, i+1);
       end;
       
     end 
 
     % Normalize initial vector
-    beta = norm(int(:, end));
+    beta = norm(int_(:, end));
     if beta == 0
       
       % Multiplying with a zero vector, hence result is zero
@@ -160,13 +165,13 @@ while tnow < tout
       reject = reject+ireject;
       step = step+1;
       tau = tout-tnow;
-      w = w+int(:, 2:p-1)*cumprod(tau*1./(1: p-2)');
+      w = w+int_(:, 2:p-1)*cumprod(tau*1./(1: p-2)');
       break;
     
     end;
 
     % The first Krylov basis vector
-    V(:, 1) = int(:, end)./beta;
+    V(:, 1) = int_(:, end)./beta;
   
   end;
 
@@ -255,7 +260,14 @@ while tnow < tout
   H(j+1, j) = 0;
   
   % Compute the exponential of the augmented matrix
-  [F,hnorm] = expmnorm(sgn*tau*H(1:j+p, 1:j+p));
+  
+  % OLD
+  %[F,hnorm] = expmnorm(sgn*tau*H(1:j+p, 1:j+p));  
+  
+  %NEW - seb modified
+  F = expm(sgn*tau*H(1:j+p, 1:j+p)); 
+  hnorm = norm(F);
+  
   % F(1:j,j+k) = tau^k phi_k(A)
   
   exps = exps+1;
@@ -343,8 +355,8 @@ while tnow < tout
     % Yep, got the required tolerance; update 
     reject = reject+ireject;
     step = step+1;
-    up = w+int(:, 2:p-1)*cumprod(tau*1./(1: p-2)');
-    % up = w+sum_{k=1}^{p-2} tau^k / k! * int(:,k+1)
+    up = w+int_(:, 2:p-1)*cumprod(tau*1./(1: p-2)');
+    % up = w+sum_{k=1}^{p-2} tau^k / k! * int_(:,k+1)
     
     % Using the corrected quantity
     F(j+1, j+p-1) = h*F(j, j+p);

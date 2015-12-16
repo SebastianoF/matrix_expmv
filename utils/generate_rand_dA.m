@@ -10,8 +10,8 @@ function [dA, c] = generate_rand_dA()
     % with relative class c
     % according to the subdivision in classes provided in main.m 
     
-    a = - pi/4;
-    b = pi/4;
+    a = - 3;
+    b = 3;
     S = (b - a)*rand(2, 2) + a;
     t = 5*rand(2,1);
     

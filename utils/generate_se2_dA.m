@@ -1,4 +1,4 @@
-function dA = generate_se2(param)
+function dA = generate_se2_dA(param)
     % A = generate_se2_a(theta, tx, ty)
     % generate an element of the Lie algebra se2
     % The corrseponding element in the Lie group can be generated using

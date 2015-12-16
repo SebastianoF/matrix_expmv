@@ -33,6 +33,12 @@ function [w, stats] = expmvp(t, A, u, tol, m)
 
 % n is the size of the original problem
 % p is the number of phi functions
+
+% NOTE: some blind modifications has been made by Seb. This version it 
+% differs from the original one found online at 
+% http://www1.maths.leeds.ac.uk/~jitse/expmvp.m by Jitse Niesen
+% See OLD commented and NEW uncommented.
+
 [n, ppo] = size(u);
 p = ppo - 1;
 nnze = nnz(A);
@@ -119,7 +125,12 @@ while t_now < t_out
     end;
 
     % The first Krylov basis vector
-    V(:, 1) = w ./ beta;
+    
+    % OLD
+    % V(:, 1) = w ./ beta;
+    
+    % NEW modified by Seb
+    V(:, 1) = w(1:3) ./ beta;
   
   end;
 
@@ -158,11 +169,22 @@ while t_now < t_out
   H(j + 1, j) = 0;
   
   % Compute the exponential of the augmented matrix
-  [F, hnorm] = expmnorm(sgn * tau * H(1:j + p, 1:j + p));
+  
+  % OLD
+  %[F,hnorm] = expmnorm(sgn*tau*H(1:j+p, 1:j+p));  
+  
+  %NEW - seb modified
+  F = expm(sgn*tau*H(1:j+p, 1:j+p)); 
+  hnorm = norm(F);
+  
   exps = exps + 1;
   
   % Local truncation error estimation
-  err = abs(beta * h * F(j, j + 1));
+  % OLD
+  %err = abs(beta * h * F(j, j + 1));
+  
+  % new modified by Seb
+  err = abs(beta * h * F(j, j));
   
   % Error per unit step
   oldomega = omega;
@@ -236,8 +258,15 @@ while t_now < t_out
     step = step + 1;
     
     % Using the corrected quantity
-    F(j + 1, j) = h * F(j, j + 1);
-    w = beta * V(1:n, 1:j + 1) * F(1:j + 1, 1);
+    
+    % OLD
+    %F(j + 1, j) = h * F(j, j + 1);
+    %w = beta * V(1:n, 1:j + 1) * F(1:j + 1, 1);
+    
+    % NEW:
+    F(j, j) = h * F(j, j);
+    w = beta * V(1:n, 1:j) * F(1:j, 1);
+    
     
     % Update t
     t_now = t_now + tau;

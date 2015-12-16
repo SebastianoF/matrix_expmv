@@ -2,8 +2,7 @@
 
 % test 1
 
-clear all
-close all
+clear 
 
 A = generate_se2([0,1,1]);
 
@@ -20,8 +19,7 @@ end
 
 % test 2
 
-clear all
-close all
+clear
 
 A = generate_se2();
 
@@ -40,8 +38,7 @@ end
 
 % test 3
 
-clear all
-close all
+clear
 
 A = generate_se2([.0, 3, 2]);
 
@@ -58,5 +55,4 @@ elseif risp == 1
     disp('test_se2 3 passed');
 end
 
-clear all
-close all
+clear
