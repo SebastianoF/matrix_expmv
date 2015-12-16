@@ -3,7 +3,7 @@ function dA = generate_rand_dA_by_taste(taste_input)
     % of the appropriate class with a Montecarlo algoritm based on the
     % function generate_rand_A
     
-    if taste_input == 5
+    if taste_input == 6
         dA = generate_se2_dA();
     else
 

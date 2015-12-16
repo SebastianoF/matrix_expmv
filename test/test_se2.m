@@ -4,7 +4,7 @@
 
 clear 
 
-A = generate_se2([0,1,1]);
+A = generate_se2_dA([0,1,1]);
 
 exp_A      = exp_se2(A);
 exp_ground = eye(3) + A;
@@ -21,7 +21,7 @@ end
 
 clear
 
-A = generate_se2();
+A = generate_se2_dA();
 
 exp_A  = exp_se2(A);
 expm_A = expm(A);
@@ -40,7 +40,7 @@ end
 
 clear
 
-A = generate_se2([.0, 3, 2]);
+A = generate_se2_dA([.0, 3, 2]);
 
 exp_A      = exp_se2(A);
 exp_ground = eye(3);

@@ -1,9 +1,9 @@
 %{
 ----------------------------------------------------------------------
 Aim of this procedure is to compare the expmv methods collected in the 
-folder, for the 4 different classes of stationary linear ODE.
+folder, for the 6 different tastes* of stationary linear ODE.
 ----------------------------------------------------------------------
-
+*) see README.dm
 %}
 
 addpath(genpath(pwd))
@@ -16,7 +16,7 @@ clc
 %%% controller %%%
 %%%%%%%%%%%%%%%%%%
 
-show_comparison_1 = false;
+show_comparison_1 = true;
 show_comparison_2 = true;
 
 % handles exp methods
@@ -34,7 +34,7 @@ if show_comparison_1 == true
     v = [0.5, 0.5, 1]';
     dA = generate_se2_dA([pi/8, 0.1, 0.1]);
     
-    % ground. Matrix of class 4 are the only for which 
+    % ground. Matrix of taste 6 are the only for which 
     % we have a ground truth implemented.
     
     A = exp_se2(dA); 
@@ -82,7 +82,7 @@ if show_comparison_1 == true
               norm(A_v_gr - A_v_phileja , 2), ...
               norm(A_v_gr - A_v_phipm, 2)];
    
-    fprintf('\n Error for each method: class 4 ground truth available:')
+    fprintf('\n Error for each method: for taste 6 ground truth available:')
           
     fprintf('\n\n %17s %17s %17s %17s %17s %17s\n', ...
             'expm', 'exp_leja', 'expmv', 'expmvp', 'phileja', 'phipm');
@@ -96,14 +96,14 @@ end
 
 if show_comparison_2 == true
     
-    S = 100;       % Number of samples for each class.
+    S = 100;       % Number of samples for each taste.
     Methods = 5;  % expm, exp_leja, expmv, expmvp, phileja, phipm.
-    Classes = 4;  % class 1, 2, 3, 4
+    Tastes = 6;  % class 1, 2, 3, 4
     
     v = [10.5, 10.5, 1]';
     
-    Errors = zeros(Methods, Classes, S);
-    Times  = zeros(Methods, Classes, S);
+    Errors = zeros(Methods, Tastes, S);
+    Times  = zeros(Methods, Tastes, S);
     
     disp('Second comparison with multiple random matrices of any class.')
     disp('The ground truth is given by expm(dA)*v .')
@@ -112,10 +112,10 @@ if show_comparison_2 == true
     % 1 plot for each method
     
     for s =1:S
-        for c = 1:Classes
+        for ta = 1:Tastes
             % generate dA and compute the ground truth expm(dA)*v
             
-            dA = generate_rand_dA_cl(c);  
+            dA = generate_rand_dA_by_taste(ta);  
             A_v_gr = expm(dA)*v;
             
             % - this part can be refactored using handles - 
@@ -123,32 +123,32 @@ if show_comparison_2 == true
             % Method 1: expleja
             tic
             A_v_expleja = expleja(1, dA, v);
-            Times(1, c, s) = toc;
-            Errors(1, c, s) = norm(A_v_gr - A_v_expleja);
+            Times(1, ta, s) = toc;
+            Errors(1, ta, s) = norm(A_v_gr - A_v_expleja);
             
             % Method 2: expmv
             tic
             A_v_expmv   = expmv(1, dA, v, 'double');
-            Times(2, c, s) = toc;
-            Errors(2, c, s) = norm(A_v_gr - A_v_expmv);
+            Times(2, ta, s) = toc;
+            Errors(2, ta, s) = norm(A_v_gr - A_v_expmv);
             
             % Method 3: expmvp
             tic
             A_v_expmvp  = expmvp(1, dA, v);
-            Times(3, c, s) = toc;
-            Errors(3, c, s) = norm(A_v_gr - A_v_expmvp);
+            Times(3, ta, s) = toc;
+            Errors(3, ta, s) = norm(A_v_gr - A_v_expmvp);
             
             % Method 4: phileja
             tic
             A_v_phileja = phileja(1, dA, 0, v);
-            Times(4, c, s) = toc;
-            Errors(4, c, s) = norm(A_v_gr - A_v_phileja);
+            Times(4, ta, s) = toc;
+            Errors(4, ta, s) = norm(A_v_gr - A_v_phileja);
             
             % Method 5: phipm
             tic
             A_v_phipm   = phipm(1, dA, v);
-            Times(5, c, s) = toc;
-            Errors(5, c, s) = norm(A_v_gr - A_v_phipm);
+            Times(5, ta, s) = toc;
+            Errors(5, ta, s) = norm(A_v_gr - A_v_phipm);
        
        end
        
@@ -159,8 +159,8 @@ if show_comparison_2 == true
     for m = 1:Methods
         subplot(1,5,m)
         hold on
-        for c = 1:Classes
-            scatter(Errors(m, c, :), Times(m, c, :));
+        for ta = 1:Tastes
+            scatter(Errors(m, ta, :), Times(m, ta, :));
             set(gca,'xscale','log')
             %set(gca,'yscale','log')
             title(exp_method_name(m))
@@ -173,6 +173,8 @@ if show_comparison_2 == true
                strcat('Class ', num2str(2)), ...
                strcat('Class ', num2str(3)), ...
                strcat('Class ', num2str(4)), ...
+               strcat('Class ', num2str(5)), ...
+               strcat('Class ', num2str(6)), ...
                'Location','NorthEast');
  
         hold off

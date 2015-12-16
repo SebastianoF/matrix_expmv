@@ -1,7 +1,5 @@
 
 clear 
-close all
-
 %disp('One answer: ')
 %disp(weighted_dice(['a','b','c','d','e','f'], [0.1, 0.1, 0.5, 0.1, 0.1, 0.1]))
 
@@ -25,7 +23,7 @@ end
 
 %disp(beans)
 
-figure(2);
+figure(4);
 bar(beans)
 set(gca,'XTickLabel',{'0.1', '0.1', '0.5', '0.1', '0.1', '0.1'});
 xlabel('weight of each face');

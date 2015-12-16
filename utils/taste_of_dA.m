@@ -28,9 +28,13 @@ function ta = taste_of_dA(dA)
     % eig complex conjugate
     else
         
-        % real part is negative or positive
-        if abs(real(l1)) > (10^4)*eps
+        % real part is positive
+        if real(l1) > (10^4)*eps
             ta = 4; 
+            
+        % real part is negative
+        elseif real(l1) < -(10^4)*eps
+            ta = 5; 
             
         % real part is zero: 
         % NOTE this case will almost never be taken into account for 
@@ -39,7 +43,7 @@ function ta = taste_of_dA(dA)
         % To generate a matrix of this type is necessarily to use the
         % function generate_se2 instead! See generate_rand_A_by_taste.
         else
-            ta = 5;   
+            ta = 6;   
         end
     end
 end
