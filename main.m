@@ -21,7 +21,7 @@ show_comparison_2 = true;
 
 % handles exp methods
 exp_method = {@exp_se2, @expm, @exp_leja, @expmv, @expmvp, @phileja, @phipm};
-exp_method_name = {'expm', 'exp_leja', 'expmv', 'expmvp', 'phileja', 'phipm'};
+exp_method_name = {'exp_leja', 'expmv', 'expmvp', 'phileja', 'phipm'};
 
 %%%%%%%%%%%%%%%%%%%
 %%% model- view %%%
