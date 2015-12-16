@@ -6,25 +6,33 @@
 clear
 close all
 
-classes = zeros(1,4);
+sampled_tastes = zeros(1,5);
 
 for j=1:1000
-    [~, c] = generate_rand_dA();
-    classes(c) = classes(c) + 1;
+    [~, ta] = generate_rand_dA();
+    sampled_tastes(ta) = sampled_tastes(ta) + 1;
 end
 
 figure(2);
-bar(classes)
-set(gca,'XTickLabel',{'1', '2', '3', '4'});
-xlabel('classes');
+bar(sampled_tastes)
+set(gca,'XTickLabel',{'1', '2', '3', '4', '5'});
+xlabel('tastes');
 ylabel('frequency');
 
 % It is correct if it is unbalanced with zero or almost zero elements in
 % the class 4
-if classes(4) > 10
-    disp('test_generator_class_division 0 NOT passed');
+if sampled_tastes(5) > 10
+    disp('test_generator_class_division 0a NOT passed');
 else
-    disp('test_generator_class_division 0 passed');
+    disp('test_generator_class_division 0a passed');
+end
+
+% The probability of having an element of taste 1 or 2 should be almost the
+% same
+if abs(sampled_tastes(1) - sampled_tastes(2)) > 25
+    disp('test_generator_class_division 0b NOT passed');
+else
+    disp('test_generator_class_division 0b passed');
 end
 
 % test 1: to see if a matrix of a class 1 in input_class is really of this
@@ -32,9 +40,9 @@ end
 
 clear 
 
-cl_input = 1;
+ta_input = 1;
 
-dA = generate_rand_dA_cl(cl_input);
+dA = generate_rand_dA_cl(ta_input);
 S = dA(1:2, 1:2);
 
 e = eig(S); l1 = e(1); l2 = e(2);
@@ -59,9 +67,9 @@ end
 
 clear 
 
-cl_input = 2;
+ta_input = 2;
 
-dA = generate_rand_dA_cl(cl_input);
+dA = generate_rand_dA_cl(ta_input);
 S = dA(1:2, 1:2);
 
 e = eig(S); l1 = e(1); l2 = e(2);
@@ -88,9 +96,9 @@ clear
 
 rng(5);
 
-cl_input = 3;
+ta_input = 3;
 
-dA = generate_rand_dA_cl(cl_input);
+dA = generate_rand_dA_cl(ta_input);
 S = dA(1:2, 1:2);
 
 e = eig(S); 
@@ -117,9 +125,9 @@ end
 
 clear
 
-cl_input = 4;
+ta_input = 4;
 
-dA = generate_rand_dA_cl(cl_input);
+dA = generate_rand_dA_cl(ta_input);
 S = dA(1:2, 1:2);
 
 e = eig(S); l1 = e(1); l2 = e(2);

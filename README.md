@@ -24,26 +24,28 @@ dA = [a, b, alpha;
 is the associated matrix.
 The exponential map of dA, among other things, solves the ode.
 
-The matrices of the kind dA can be classifed according to 5 types
-according to the eigenvalues of the part
+The matrices of the kind dA can be classifed according to 6 types (called
+"tastes" to avoid confusions) according to the 2 eigenvalues of dA
 
-dAs = [a, b; 
-       c, d]
 
-Type 1:
+Taste 1:
 real eigenvalues with the same signs, positive (unstable node).
 
-Type 2:
+Taste 2:
 real eigenvalues with the same signs, negative (stable node).
 
-Type 3:
+Taste 3:
 real eigenvalues with opposite signs (saddle).
 
-Type 4:
-complex (conjugates) eigenvalues with negative real part (spiral).
+Taste 4:
+complex (conjugates) eigenvalues with positive real part (unstable spiral).
 
-Type 5:
-complex (conjugates) eigenvalues with positive real part (circles).
+Taste 5:
+complex (conjugates) eigenvalues with negative real part (stable spiral).
+
+Taste 6:
+complex (conjugates) eigenvalues with zero real part (circles).
+These are also elements of the Lie algebra se2
 
 
 See test_generator_class_division to see the four classes of ode
