@@ -96,19 +96,20 @@ end
 
 if show_comparison_2 == true
     
-    S = 100;       % Number of samples for each taste.
+    S = 80;       % Number of samples for each taste.
     Methods = 5;  % expm, exp_leja, expmv, expmvp, phileja, phipm.
-    Tastes = 6;  % class 1, 2, 3, 4
+    Tastes = 6;  % taste 1, 2, 3, 4, 5, 6
     
     v = [10.5, 10.5, 1]';
     
     Errors = zeros(Methods, Tastes, S);
     Times  = zeros(Methods, Tastes, S);
     
-    disp('Second comparison with multiple random matrices of any class.')
+    fprintf('\n\n')
+    disp('Second comparison with multiple random matrices of any taste.')
     disp('The ground truth is given by expm(dA)*v .')
     
-    % 1 colour for each class
+    % 1 colour for each taste
     % 1 plot for each method
     
     for s =1:S
@@ -162,19 +163,19 @@ if show_comparison_2 == true
         for ta = 1:Tastes
             scatter(Errors(m, ta, :), Times(m, ta, :));
             set(gca,'xscale','log')
-            %set(gca,'yscale','log')
+            set(gca,'yscale','log')
             title(exp_method_name(m))
             xlabel('Error (norm2)')
             ylabel('Computational time (sec)') 
         end
         
         legend(gca, ...
-               strcat('Class ', num2str(1)), ...
-               strcat('Class ', num2str(2)), ...
-               strcat('Class ', num2str(3)), ...
-               strcat('Class ', num2str(4)), ...
-               strcat('Class ', num2str(5)), ...
-               strcat('Class ', num2str(6)), ...
+               strcat('Taste ', num2str(1)), ...
+               strcat('Taste ', num2str(2)), ...
+               strcat('Taste ', num2str(3)), ...
+               strcat('Taste ', num2str(4)), ...
+               strcat('Taste ', num2str(5)), ...
+               strcat('Taste ', num2str(6)), ...
                'Location','NorthEast');
  
         hold off
