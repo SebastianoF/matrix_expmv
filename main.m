@@ -95,11 +95,89 @@ if show_comparison_1 == true
 end
 
 if show_comparison_2 == true
-    N = 500;
+    
+    S = 100;       % Number of samples for each class.
+    Methods = 5;  % expm, exp_leja, expmv, expmvp, phileja, phipm.
+    Classes = 4;  % class 1, 2, 3, 4
+    
+    v = [10.5, 10.5, 1]';
+    
+    Errors = zeros(Methods, Classes, S);
+    Times  = zeros(Methods, Classes, S);
+    
     disp('Second comparison with multiple random matrices of any class.')
     disp('The ground truth is given by expm(dA)*v .')
     
+    % 1 colour for each class
+    % 1 plot for each method
     
+    for s =1:S
+        for c = 1:Classes
+            % generate dA and compute the ground truth expm(dA)*v
+            
+            dA = generate_rand_dA_cl(c);  
+            A_v_gr = expm(dA)*v;
+            
+            % - this part can be refactored using handles - 
+            
+            % Method 1: expleja
+            tic
+            A_v_expleja = expleja(1, dA, v);
+            Times(1, c, s) = toc;
+            Errors(1, c, s) = norm(A_v_gr - A_v_expleja);
+            
+            % Method 2: expmv
+            tic
+            A_v_expmv   = expmv(1, dA, v, 'double');
+            Times(2, c, s) = toc;
+            Errors(2, c, s) = norm(A_v_gr - A_v_expmv);
+            
+            % Method 3: expmvp
+            tic
+            A_v_expmvp  = expmvp(1, dA, v);
+            Times(3, c, s) = toc;
+            Errors(3, c, s) = norm(A_v_gr - A_v_expmvp);
+            
+            % Method 4: phileja
+            tic
+            A_v_phileja = phileja(1, dA, 0, v);
+            Times(4, c, s) = toc;
+            Errors(4, c, s) = norm(A_v_gr - A_v_phileja);
+            
+            % Method 5: phipm
+            tic
+            A_v_phipm   = phipm(1, dA, v);
+            Times(5, c, s) = toc;
+            Errors(5, c, s) = norm(A_v_gr - A_v_phipm);
+       
+       end
+       
+    end
+    
+    figure('units','normalized','position',[.1 .1 .8 .3]);
+    
+    for m = 1:Methods
+        subplot(1,5,m)
+        hold on
+        for c = 1:Classes
+            scatter(Errors(m, c, :), Times(m, c, :));
+            set(gca,'xscale','log')
+            %set(gca,'yscale','log')
+            title(exp_method_name(m))
+            xlabel('Error (norm2)')
+            ylabel('Computational time (sec)') 
+        end
+        
+        legend(gca, ...
+               strcat('Class ', num2str(1)), ...
+               strcat('Class ', num2str(2)), ...
+               strcat('Class ', num2str(3)), ...
+               strcat('Class ', num2str(4)), ...
+               'Location','NorthEast');
+ 
+        hold off
+        
+    end
     
 end
 

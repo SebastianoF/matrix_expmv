@@ -1,13 +1,13 @@
-MAtlab 2014b (.11)
+Matlab 2014b
 
-=======================
-Exponential map of dA times a vector
-=======================
+=======================================================
+Exponential map of the square matrix dA times a vector
+=======================================================
 
 ----------------------------------------------------------------------
 Aim of this project is to compare some expmv methods collected in the 
-folder expmv_methods, for the 4 different classes of stationary linear 
-Ordinary differential equations.
+folder expmv_methods, for the 4 different classes of 
+stationary linear ordinary differential equations.
 ----------------------------------------------------------------------
 
 Matrices are defined by a 2x2 Stationary linear ODE system
@@ -24,23 +24,26 @@ dA = [a, b, alpha;
 is the associated matrix.
 The exponential map of dA, among other things, solves the ode.
 
-The matrices of the kind dA can be classifed according to 4 classes
+The matrices of the kind dA can be classifed according to 5 types
 according to the eigenvalues of the part
 
 dAs = [a, b; 
        c, d]
 
-Class 1:
-real eigenvalues with the same signs (node)
+Type 1:
+real eigenvalues with the same signs, positive (unstable node).
 
-Class 2:
-real eigenvalues with opposite signs (saddle)
+Type 2:
+real eigenvalues with the same signs, negative (stable node).
 
-Class 3:
-complex (conjugates) eigenvalues with negative real part (spiral)
+Type 3:
+real eigenvalues with opposite signs (saddle).
 
-Class 4:
-complex (conjugates) eigenvalues with positive real part (circles)
+Type 4:
+complex (conjugates) eigenvalues with negative real part (spiral).
+
+Type 5:
+complex (conjugates) eigenvalues with positive real part (circles).
 
 
 See test_generator_class_division to see the four classes of ode
@@ -54,14 +57,41 @@ class 4 which are also elements of the Lie algebra se2.
 
 
 ----
+Bibliography:
 
-Hoppenstead "Analysis and simulation of chaotic system" (ch. 2.1)
-For a classification of the linear stationary ode.
+Hoppenstead 
+"Analysis and simulation of chaotic system" (ch. 2.1)
+%For a classification of the linear stationary ode.
 
-Caliari et al "Comparison of various methods for computing the action of
+Caliari et al 
+"Comparison of various methods for computing the action of
 the matrix exponential"
-For the theoretical comparison of some of the selected methods.
+%For the theoretical comparison of some of the selected methods.
+
+Moler, Van Loan
+"nineteen dubious ways to compute the exponential of a matrix"
+% Milestone in the computation of the matrix exponential
+
+----
+Methods compared:
+
+'exp_leja': 
+http://uk.mathworks.com/matlabcentral/fileexchange/44039-matrix-exponential-times-a-vector/content/expleja.m
+
+'expmv':
+http://www.mathworks.com/matlabcentral/fileexchange/29576-matrix-exponential-times-a-vector/content/expmv.m
+
+'expmvp': (little modifications from the original verions) 
+http://www1.maths.leeds.ac.uk/~jitse/expmvp.m
+
+'phileja': 
+http://uk.mathworks.com/matlabcentral/fileexchange/40949-meshfree-exponential-integrator/content/MExpInt2D/phileja.m
+
+'phipm': (little modifications from the original verions) 
+http://www1.maths.leeds.ac.uk/~jitse/phipm.m
 
 -----
 
-Please run the test to see that everything works!
+Please run the procedure main_test to see that everything works!
+
+-----

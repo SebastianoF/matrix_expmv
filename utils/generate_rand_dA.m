@@ -1,4 +1,4 @@
-function [dA, c] = generate_rand_dA()
+function [dA, ty] = generate_rand_dA()
     
     % A = generate_rand_A()
     % generate a matrix of the form
@@ -7,13 +7,13 @@ function [dA, c] = generate_rand_dA()
     %       c, d, beta;
     %       0, 0, 0]
     %
-    % with relative class c
+    % with relative type ty
     % according to the subdivision in classes provided in main.m 
     
-    a = - 3;
-    b = 3;
+    a = - 5;
+    b = 5;
     S = (b - a)*rand(2, 2) + a;
-    t = 5*rand(2,1);
+    t = 10*rand(2,1)-5;
     
     dA = [S,t];
     dA = [dA; 0, 0, 0];
@@ -26,13 +26,15 @@ function [dA, c] = generate_rand_dA()
     if imag(l1) < (10^4)*eps && imag(l2) < (10^4)*eps
         l1 = real(l1); l2 = real(l2);
         
-        % both real and same sings
-        if l1*l2 > 0 
-            c = 1;
+        % both real and positive
+        if l1 > 0 && l2 > 0 
+            ty = 1;
         
-            % both real and opposite sings
+            % both real and negative
+        elseif l1 < 0 && l2 < 0 
+            
         else
-            c = 2;
+            ty = 3;
         end
         
     % eig complex conjugate
@@ -40,7 +42,7 @@ function [dA, c] = generate_rand_dA()
         
         % real part is negative or positive
         if abs(real(l1)) > (10^4)*eps
-            c = 3; 
+            ty = 3; 
             
         % real part is zero: 
         % NOTE this case will almost never be taken into account for 
@@ -49,7 +51,7 @@ function [dA, c] = generate_rand_dA()
         % To generate a matrix of this type is necessarily to use the
         % function generate_se2 instead! See generate_rand_A_cl
         else
-            c = 4;   
+            ty = 4;   
         end
     end
       

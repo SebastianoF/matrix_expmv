@@ -4,7 +4,7 @@ function dA = generate_rand_dA_cl(c_input)
     % function generate_rand_A
     
     if c_input == 4
-        dA = generate_se2();
+        dA = generate_se2_dA();
     else
 
         flag = 0;
