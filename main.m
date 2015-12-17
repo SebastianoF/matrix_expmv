@@ -8,9 +8,9 @@ folder, for the 6 different tastes* of stationary linear ODE.
 
 addpath(genpath(pwd))
 
-clear
-close all
-clc
+%clear
+%close all
+%clc
 
 %%%%%%%%%%%%%%%%%%
 %%% controller %%%
@@ -96,9 +96,15 @@ end
 
 if show_comparison_2 == true
     
+    
+    %%% to avoid the computaiton at each run
+    if 1 == 1
+        
     S = 80;       % Number of samples for each taste.
     Methods = 5;  % expm, exp_leja, expmv, expmvp, phileja, phipm.
     Tastes = 6;  % taste 1, 2, 3, 4, 5, 6
+    
+    
     
     v = [10.5, 10.5, 1]';
     
@@ -117,10 +123,14 @@ if show_comparison_2 == true
             % generate dA and compute the ground truth expm(dA)*v
             
             dA = generate_rand_dA_by_taste(ta);  
+            tic
             A_v_gr = expm(dA)*v;
+            ground_time_val = toc;
+            
             
             % - this part can be refactored using handles - 
-            
+            disp('')
+           
             % Method 1: expleja
             tic
             A_v_expleja = expleja(1, dA, v);
@@ -155,6 +165,9 @@ if show_comparison_2 == true
        
     end
     
+    %%% to avoid the computaiton at each run
+    end
+    
     figure('units','normalized','position',[.1 .1 .8 .3]);
     
     for m = 1:Methods
@@ -163,7 +176,7 @@ if show_comparison_2 == true
         for ta = 1:Tastes
             scatter(Errors(m, ta, :), Times(m, ta, :));
             set(gca,'xscale','log')
-            set(gca,'yscale','log')
+            %set(gca,'yscale','log')
             title(exp_method_name(m))
             xlabel('Error (norm2)')
             ylabel('Computational time (sec)') 
@@ -182,6 +195,98 @@ if show_comparison_2 == true
         
     end
     
+    
+    figure('units','normalized','position',[.1 .1 .8 .3]);
+    
+    for m = 1:Methods
+        subplot(1,5,m)
+        hold on
+        for ta = 1:Tastes
+            % time is given by the sum of each sampling for each taste,
+            % divided by the number of sampling
+            scatter(Errors(m, ta, :), (sum(Times(m, ta, :))/S) * ones(size(Errors(m, ta, :))) );
+            set(gca,'xscale','log')
+            %set(gca,'yscale','log')
+            title(exp_method_name(m))
+            xlabel('Error (norm2)')
+            ylabel('Mean computational time (sec)') 
+        end
+        
+        legend(gca, ...
+               strcat('Taste ', num2str(1)), ...
+               strcat('Taste ', num2str(2)), ...
+               strcat('Taste ', num2str(3)), ...
+               strcat('Taste ', num2str(4)), ...
+               strcat('Taste ', num2str(5)), ...
+               strcat('Taste ', num2str(6)), ...
+               'Location','NorthEast');
+ 
+        hold off
+        
+    end
+    
+    
+    
+    figure('units','normalized','position',[.1 .1 .8 .3])
+     for m = 1:Methods
+        subplot(1,5,m)
+        hold on
+        for ta = 1:Tastes
+            
+            scatter(mean(Errors(m, ta, :)), mean(Times(m, ta, :)));
+            set(gca,'xscale','log')
+            %set(gca,'yscale','log')
+            title(exp_method_name(m))
+            xlabel('Mean error (norm2)')
+            ylabel('Mean computational time (sec)') 
+        end
+        
+        legend(gca, ...
+               strcat('Taste ', num2str(1)), ...
+               strcat('Taste ', num2str(2)), ...
+               strcat('Taste ', num2str(3)), ...
+               strcat('Taste ', num2str(4)), ...
+               strcat('Taste ', num2str(5)), ...
+               strcat('Taste ', num2str(6)), ...
+               'Location','Best');
+ 
+        hold off
+        
+     end
+    
+    figure('units','normalized','position',[.1 .1 .8 .3]);
+    
+    for m = 1:Methods
+        subplot(1,5,m)
+        hold on
+        for ta = 1:Tastes
+            % time is given by the sum of each sampling for each taste,
+            % divided by the number of sampling times the computational
+            % time of the ground truth expm(dA)*v
+            scatter(Errors(m, ta, :), (sum(Times(m, ta, :))/(S*ground_time_val)) * ones(size(Errors(m, ta, :))) );
+            set(gca,'xscale','log')
+            %set(gca,'yscale','log')
+            title(exp_method_name(m))
+            xlabel('Error (norm2)')
+            ylabel('Relative mean computational time (sec)') 
+        end
+        
+        legend(gca, ...
+               strcat('Taste ', num2str(1)), ...
+               strcat('Taste ', num2str(2)), ...
+               strcat('Taste ', num2str(3)), ...
+               strcat('Taste ', num2str(4)), ...
+               strcat('Taste ', num2str(5)), ...
+               strcat('Taste ', num2str(6)), ...
+               'Location','NorthEast');
+ 
+        hold off
+        
+    end
+    
+     
+     
+     
 end
 
 
