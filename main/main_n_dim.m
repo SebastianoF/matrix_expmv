@@ -23,7 +23,7 @@ clc
 %%% controller %%%
 %%%%%%%%%%%%%%%%%%
 
-compute = 1;  % if 1 compute and save, if 0 load the data.
+compute = 0;  % if 1 compute and save, if 0 load the data.
 
 %%%%%%%%%%%%%%%%%%%
 %%% model- view %%%
@@ -51,6 +51,7 @@ if compute == 1
 
     Errors_n_dim = zeros(Methods, Tastes, S);
     Times_n_dim  = zeros(Methods, Tastes, S);
+    ground_time_val_n_dim = zeros(Tastes, S);
 
     fprintf('\n\n')
     disp('Comparison with multiple random matrices of any taste.')
@@ -71,7 +72,7 @@ if compute == 1
             dA = generate_rand_dA_by_taste_n_dim(n, tastes_names(ta));  
             tic
             A_v_gr = expm(dA)*v;
-            ground_time_val = toc;
+            ground_time_val_n_dim(ta, s) = toc;
 
 
             % - this part can be refactored using handles - 
@@ -116,13 +117,17 @@ if compute == 1
     
     % waitbar close
     close(h)
-
+   
     save('results/Errors_n_dim.mat', 'Errors_n_dim')
     save('results/Times_n_dim.mat', 'Times_n_dim')
-
+    save('results/ground_time_val_n_dim.mat', 'ground_time_val_n_dim')
+    disp('Data saved in folder results')
+    
 else
     load('results/Errors_n_dim.mat', 'Errors_n_dim')
     load('results/Times_n_dim.mat', 'Times_n_dim')
+    load('results/ground_time_val_n_dim.mat', 'ground_time_val_n_dim')
+    disp('Data loaded from folder results')
 
 end
 
@@ -143,17 +148,20 @@ for m = 1:Methods
         xlabel('Error (norm2)')
         ylabel('Computational time (sec)') 
     end
-
-    legend(gca, ...
-           strcat('Taste ', ' pos'), ...
-           strcat('Taste ', ' neg'), ...
-           strcat('Taste ', ' mix'), ...
-           'Location','NorthEast');
-
     hold off
 
 end
 
+h = legend(gca, ...
+           strcat('Taste ', ' pos'), ...
+           strcat('Taste ', ' neg'), ...
+           strcat('Taste ', ' mix'), ...
+               'Location','northeastoutside');
+    
+pos = get(h,'position');
+set(h, 'position',[0.9198 0.7259 pos(3:4)])
+
+%%%%%%%%%%%%%%%%%%%
 
 figure('units','normalized','position',[.1 .1 .8 .3]);
     
@@ -165,22 +173,23 @@ for m = 1:Methods
         % divided by the number of sampling times the computational
         % time of the ground truth expm(dA)*v
         scatter(Errors_n_dim(m, ta, :), (sum(Times_n_dim(m, ta, :))/...
-            (S*ground_time_val)) * ones(size(Errors_n_dim(m, ta, :))) );
+            (S*mean(ground_time_val_n_dim(ta, :)))) * ones(size(Errors_n_dim(m, ta, :))) );
         set(gca,'xscale','log')
         %set(gca,'yscale','log')
         title(exp_method_name(m))
         xlabel('Error (norm2)')
         ylabel('Relative mean computational time (sec)') 
     end
-
-    legend(gca, ...
-           strcat('Taste ', ' pos'), ...
-           strcat('Taste ', ' neg'), ...
-           strcat('Taste ', ' mix'), ...
-           'Location','Best');
-
-
     hold off
 
 end
+
+h = legend(gca, ...
+           strcat('Taste ', ' pos'), ...
+           strcat('Taste ', ' neg'), ...
+           strcat('Taste ', ' mix'), ...
+               'Location','northeastoutside');
+    
+pos = get(h,'position');
+set(h, 'position',[0.9198 0.7259 pos(3:4)])
 

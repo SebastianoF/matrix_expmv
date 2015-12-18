@@ -6,9 +6,9 @@ folder, for the 6 different tastes* of 2d stationary linear ODE.
 *) see README.dm
 %}
 
-%clear
-%close all
-%clc
+clear
+close all
+clc
 
 %%%%%%%%%%%%%%%%%%
 %%% controller %%%
@@ -17,7 +17,7 @@ folder, for the 6 different tastes* of 2d stationary linear ODE.
 show_comparison_1 = true;
 show_comparison_2 = true;
 
-compute = 1;  % if 1 compute and save, if 0 load the data.
+compute = 0;  % if 1 compute and save, if 0 load the data.
 
 % handles exp methods
 exp_method = {@exp_se2, @expm, @exp_leja, @expmv, @expmvp, @phileja, @phipm};
@@ -96,28 +96,29 @@ if show_comparison_1 == true
 end
 
 if show_comparison_2 == true
-    
+        
+    S = 80;       % Number of samples for each taste.
+    Methods = 5;  % expm, exp_leja, expmv, expmvp, phileja, phipm.
+    Tastes = 6;  % taste 1, 2, 3, 4, 5, 6
     
     %%% to avoid the computaiton at each run
     if compute == 1
-        
-        S = 80;       % Number of samples for each taste.
-        Methods = 5;  % expm, exp_leja, expmv, expmvp, phileja, phipm.
-        Tastes = 6;  % taste 1, 2, 3, 4, 5, 6
-
-
 
         v = [10.5, 10.5, 1]';
 
         Errors = zeros(Methods, Tastes, S);
         Times  = zeros(Methods, Tastes, S);
-
+        ground_time_val = zeros(Tastes, S);
+        
         fprintf('\n\n')
         disp('Second comparison with multiple random matrices of any taste.')
         disp('The ground truth is given by expm(dA)*v .')
 
         % 1 colour for each taste
         % 1 plot for each method
+        
+        % waitbar with cancel button creation
+        h = waitbar(0, 'steps');
 
         for s =1:S
             for ta = 1:Tastes
@@ -126,7 +127,7 @@ if show_comparison_2 == true
                 dA = generate_rand_dA_by_taste(ta);  
                 tic
                 A_v_gr = expm(dA)*v;
-                ground_time_val = toc;
+                ground_time_val(ta, s) = toc;
 
 
                 % - this part can be refactored using handles - 
@@ -163,16 +164,29 @@ if show_comparison_2 == true
                 Errors(5, ta, s) = norm(A_v_gr - A_v_phipm);
 
             end
+            % waitbar update
+            waitbar(s/S, h, sprintf('element %d out of %d',s, S))
         end
+        
+        % close waitbar
+        close(h)
         
         save('results/Errors.mat', 'Errors')
         save('results/Times.mat', 'Times')
+        save('results/ground_time_val.mat', 'ground_time_val')
+        disp('Data saved in folder results')
         
-    else
+    else        
         load('results/Errors.mat', 'Errors')
         load('results/Times.mat', 'Times')
+        load('results/ground_time_val.mat', 'ground_time_val')
+        disp('Data loaded from folder results')
         
     end
+    
+    %%%%%%%%%%%%
+    %%% view %%%
+    %%%%%%%%%%%%
     
     figure('units','normalized','position',[.1 .1 .8 .3]);
     
@@ -187,24 +201,24 @@ if show_comparison_2 == true
             xlabel('Error (norm2)')
             ylabel('Computational time (sec)') 
         end
+        hold off
         
-        legend(gca, ...
+    end
+    
+    h = legend(gca, ...
                strcat('Taste ', num2str(1)), ...
                strcat('Taste ', num2str(2)), ...
                strcat('Taste ', num2str(3)), ...
                strcat('Taste ', num2str(4)), ...
                strcat('Taste ', num2str(5)), ...
                strcat('Taste ', num2str(6)), ...
-               'Location','NorthEast');
- 
-        hold off
-        
-    end
+               'Location','northeastoutside');
+    
+    pos = get(h,'position');
+    set(h, 'position',[0.9198 0.7259 pos(3:4)])
     
     
-    %%%%%%%%%%%%
-    %%% view %%%
-    %%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%
     
     figure('units','normalized','position',[.1 .1 .8 .3]);
     
@@ -214,35 +228,38 @@ if show_comparison_2 == true
         for ta = 1:Tastes
             % time is given by the sum of each sampling for each taste,
             % divided by the number of sampling
-            scatter(Errors(m, ta, :), (sum(Times(m, ta, :))/S) * ones(size(Errors(m, ta, :))) );
+            scatter(Errors(m, ta, :), (sum(Times(m, ta, :))/S) * ones(size(Times(m, ta, :))) );
             set(gca,'xscale','log')
             %set(gca,'yscale','log')
             title(exp_method_name(m))
             xlabel('Error (norm2)')
             ylabel('Mean computational time (sec)') 
         end
-        
-        legend(gca, ...
+        hold off
+ 
+    end
+    
+    h = legend(gca, ...
                strcat('Taste ', num2str(1)), ...
                strcat('Taste ', num2str(2)), ...
                strcat('Taste ', num2str(3)), ...
                strcat('Taste ', num2str(4)), ...
                strcat('Taste ', num2str(5)), ...
                strcat('Taste ', num2str(6)), ...
-               'Location','NorthEast');
- 
-        hold off
-        
-    end
+               'Location','northeastoutside');
+    
+    pos = get(h,'position');
+    set(h, 'position',[0.9198 0.7259 pos(3:4)])
     
     
+    %%%%%%%%%%%%%%%%
     
     figure('units','normalized','position',[.1 .1 .8 .3])
-     for m = 1:Methods
+    for m = 1:Methods
         subplot(1,5,m)
         hold on
         for ta = 1:Tastes
-            
+
             scatter(mean(Errors(m, ta, :)), mean(Times(m, ta, :)));
             set(gca,'xscale','log')
             %set(gca,'yscale','log')
@@ -250,20 +267,23 @@ if show_comparison_2 == true
             xlabel('Mean error (norm2)')
             ylabel('Mean computational time (sec)') 
         end
-        
-        legend(gca, ...
+        hold off
+
+    end
+     
+     h = legend(gca, ...
                strcat('Taste ', num2str(1)), ...
                strcat('Taste ', num2str(2)), ...
                strcat('Taste ', num2str(3)), ...
                strcat('Taste ', num2str(4)), ...
                strcat('Taste ', num2str(5)), ...
                strcat('Taste ', num2str(6)), ...
-               'Location','Best');
- 
-        hold off
-        
-     end
+               'Location','northeastoutside');
+
+    pos = get(h,'position');
+    set(h, 'position',[0.9198 0.7259 pos(3:4)])
     
+    %%%%%%%%%%%%%%%%%%%%
     
     figure('units','normalized','position',[.1 .1 .8 .3]);
     
@@ -274,26 +294,28 @@ if show_comparison_2 == true
             % time is given by the sum of each sampling for each taste,
             % divided by the number of sampling times the computational
             % time of the ground truth expm(dA)*v
-            scatter(Errors(m, ta, :), (sum(Times(m, ta, :))/(S*ground_time_val)) * ones(size(Errors(m, ta, :))) );
+            scatter(Errors(m, ta, :), (sum(Times(m, ta, :))/(S*mean(ground_time_val(ta, :)))) * ones(size(Errors(m, ta, :))) );
             set(gca,'xscale','log')
             %set(gca,'yscale','log')
             title(exp_method_name(m))
             xlabel('Error (norm2)')
             ylabel('Relative mean computational time (sec)') 
         end
+        hold off
         
-        legend(gca, ...
+    end
+    
+    h = legend(gca, ...
                strcat('Taste ', num2str(1)), ...
                strcat('Taste ', num2str(2)), ...
                strcat('Taste ', num2str(3)), ...
                strcat('Taste ', num2str(4)), ...
                strcat('Taste ', num2str(5)), ...
                strcat('Taste ', num2str(6)), ...
-               'Location','NorthEast');
- 
-        hold off
-        
-    end
+               'Location','northeastoutside');
+    
+    pos = get(h,'position');
+    set(h, 'position',[0.9198 0.7259 pos(3:4)])
     
 end
 
