@@ -59,9 +59,9 @@ taste 4 which are also elements of the Lie algebra se2.
 
 ----
 
-For more than 2-dimensional problem we can not classify matrices with the 
-previous 6 tastes straightforwardly. We used instead a classification with 
-three tastes: 
+For problems with more than 2-dimensions we can not classify matrices with 
+the previous 6 tastes straightforwardly. We used instead a classification 
+with three 'string' tastes: 
 
 Taste 'neg'
 If all the eigenvalues, both real or complex, have negative or zero real 
