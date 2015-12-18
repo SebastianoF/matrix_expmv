@@ -7,6 +7,11 @@ In case of large matrices we expect to reduce the computational time
 of the computation of expm(dA)*v using the expmv methods instead, 
 maintaing a reasonable accuracy.
 
+Note 1: for matrices bigger than 90x90 the method expmvp has a bug.
+
+Note 2: if the input matrices are not big enough, it is faster to compute
+directly expm(dA)*v than the same with one of the selected methods.
+
 %}
 
 
@@ -97,7 +102,7 @@ if compute == 1
             Errors_n_dim(4, ta, s) = norm(A_v_gr - A_v_phipm);
 
             % Method 5: expmvp
-            if n < 90  % infinite loop if expmvp is used for n > 90
+            if n < 90  % infinite loop if expmvp is used for n > 90 or 100
                 tic
                 A_v_expmvp  = expmvp(1, dA, v);
                 Times_n_dim(5, ta, s) = toc;
