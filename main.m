@@ -1,12 +1,10 @@
 %{
 ----------------------------------------------------------------------
 Aim of this procedure is to compare the expmv methods collected in the 
-folder, for the 6 different tastes* of stationary linear ODE.
+folder, for the 6 different tastes* of 2d stationary linear ODE.
 ----------------------------------------------------------------------
 *) see README.dm
 %}
-
-addpath(genpath(pwd))
 
 %clear
 %close all
@@ -19,6 +17,8 @@ addpath(genpath(pwd))
 show_comparison_1 = true;
 show_comparison_2 = true;
 
+compute = 1;  % if 1 compute and save, if 0 load the data.
+
 % handles exp methods
 exp_method = {@exp_se2, @expm, @exp_leja, @expmv, @expmvp, @phileja, @phipm};
 exp_method_name = {'exp_leja', 'expmv', 'expmvp', 'phileja', 'phipm'};
@@ -29,7 +29,8 @@ exp_method_name = {'exp_leja', 'expmv', 'expmvp', 'phileja', 'phipm'};
 
 if show_comparison_1 == true
 
-    disp('First comparison with one matrix whose exponential has a known ground truth, given by the close form:')
+    disp('First comparison with one matrix whose exponential has a known')
+    disp('ground truth, given by the close form:')
     dv = [0.5, 0.5, 0]';
     v = [0.5, 0.5, 1]';
     dA = generate_se2_dA([pi/8, 0.1, 0.1]);
@@ -82,7 +83,7 @@ if show_comparison_1 == true
               norm(A_v_gr - A_v_phileja , 2), ...
               norm(A_v_gr - A_v_phipm, 2)];
    
-    fprintf('\n Error for each method: for taste 6 ground truth available:')
+    fprintf('\n Error for each method, taste 6 (ground truth available)')
           
     fprintf('\n\n %17s %17s %17s %17s %17s %17s\n', ...
             'expm', 'exp_leja', 'expmv', 'expmvp', 'phileja', 'phipm');
@@ -98,74 +99,79 @@ if show_comparison_2 == true
     
     
     %%% to avoid the computaiton at each run
-    if 1 == 1
+    if compute == 1
         
-    S = 80;       % Number of samples for each taste.
-    Methods = 5;  % expm, exp_leja, expmv, expmvp, phileja, phipm.
-    Tastes = 6;  % taste 1, 2, 3, 4, 5, 6
-    
-    
-    
-    v = [10.5, 10.5, 1]';
-    
-    Errors = zeros(Methods, Tastes, S);
-    Times  = zeros(Methods, Tastes, S);
-    
-    fprintf('\n\n')
-    disp('Second comparison with multiple random matrices of any taste.')
-    disp('The ground truth is given by expm(dA)*v .')
-    
-    % 1 colour for each taste
-    % 1 plot for each method
-    
-    for s =1:S
-        for ta = 1:Tastes
-            % generate dA and compute the ground truth expm(dA)*v
-            
-            dA = generate_rand_dA_by_taste(ta);  
-            tic
-            A_v_gr = expm(dA)*v;
-            ground_time_val = toc;
-            
-            
-            % - this part can be refactored using handles - 
-            disp('')
-           
-            % Method 1: expleja
-            tic
-            A_v_expleja = expleja(1, dA, v);
-            Times(1, ta, s) = toc;
-            Errors(1, ta, s) = norm(A_v_gr - A_v_expleja);
-            
-            % Method 2: expmv
-            tic
-            A_v_expmv   = expmv(1, dA, v, 'double');
-            Times(2, ta, s) = toc;
-            Errors(2, ta, s) = norm(A_v_gr - A_v_expmv);
-            
-            % Method 3: expmvp
-            tic
-            A_v_expmvp  = expmvp(1, dA, v);
-            Times(3, ta, s) = toc;
-            Errors(3, ta, s) = norm(A_v_gr - A_v_expmvp);
-            
-            % Method 4: phileja
-            tic
-            A_v_phileja = phileja(1, dA, 0, v);
-            Times(4, ta, s) = toc;
-            Errors(4, ta, s) = norm(A_v_gr - A_v_phileja);
-            
-            % Method 5: phipm
-            tic
-            A_v_phipm   = phipm(1, dA, v);
-            Times(5, ta, s) = toc;
-            Errors(5, ta, s) = norm(A_v_gr - A_v_phipm);
-       
-       end
-       
-    end
-    
-    %%% to avoid the computaiton at each run
+        S = 80;       % Number of samples for each taste.
+        Methods = 5;  % expm, exp_leja, expmv, expmvp, phileja, phipm.
+        Tastes = 6;  % taste 1, 2, 3, 4, 5, 6
+
+
+
+        v = [10.5, 10.5, 1]';
+
+        Errors = zeros(Methods, Tastes, S);
+        Times  = zeros(Methods, Tastes, S);
+
+        fprintf('\n\n')
+        disp('Second comparison with multiple random matrices of any taste.')
+        disp('The ground truth is given by expm(dA)*v .')
+
+        % 1 colour for each taste
+        % 1 plot for each method
+
+        for s =1:S
+            for ta = 1:Tastes
+                % generate dA and compute the ground truth expm(dA)*v
+
+                dA = generate_rand_dA_by_taste(ta);  
+                tic
+                A_v_gr = expm(dA)*v;
+                ground_time_val = toc;
+
+
+                % - this part can be refactored using handles - 
+                disp('')
+
+                % Method 1: expleja
+                tic
+                A_v_expleja = expleja(1, dA, v);
+                Times(1, ta, s) = toc;
+                Errors(1, ta, s) = norm(A_v_gr - A_v_expleja);
+
+                % Method 2: expmv
+                tic
+                A_v_expmv   = expmv(1, dA, v, 'double');
+                Times(2, ta, s) = toc;
+                Errors(2, ta, s) = norm(A_v_gr - A_v_expmv);
+
+                % Method 3: expmvp
+                tic
+                A_v_expmvp  = expmvp(1, dA, v);
+                Times(3, ta, s) = toc;
+                Errors(3, ta, s) = norm(A_v_gr - A_v_expmvp);
+
+                % Method 4: phileja
+                tic
+                A_v_phileja = phileja(1, dA, 0, v);
+                Times(4, ta, s) = toc;
+                Errors(4, ta, s) = norm(A_v_gr - A_v_phileja);
+
+                % Method 5: phipm
+                tic
+                A_v_phipm   = phipm(1, dA, v);
+                Times(5, ta, s) = toc;
+                Errors(5, ta, s) = norm(A_v_gr - A_v_phipm);
+
+            end
+        end
+        
+        save('results/Errors.mat', 'Errors')
+        save('results/Times.mat', 'Times')
+        
+    else
+        load('results/Errors.mat', 'Errors')
+        load('results/Times.mat', 'Times')
+        
     end
     
     figure('units','normalized','position',[.1 .1 .8 .3]);
@@ -195,6 +201,10 @@ if show_comparison_2 == true
         
     end
     
+    
+    %%%%%%%%%%%%
+    %%% view %%%
+    %%%%%%%%%%%%
     
     figure('units','normalized','position',[.1 .1 .8 .3]);
     
@@ -254,6 +264,7 @@ if show_comparison_2 == true
         
      end
     
+    
     figure('units','normalized','position',[.1 .1 .8 .3]);
     
     for m = 1:Methods
@@ -284,9 +295,6 @@ if show_comparison_2 == true
         
     end
     
-     
-     
-     
 end
 
 

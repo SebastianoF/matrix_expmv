@@ -127,10 +127,10 @@ while t_now < t_out
     % The first Krylov basis vector
     
     % OLD
-    % V(:, 1) = w ./ beta;
+     %V(:, 1) = w ./ beta;
     
     % NEW modified by Seb
-    V(:, 1) = w(1:3) ./ beta;
+    V(:, 1) = w(1:end-1) ./ beta;
   
   end;
 

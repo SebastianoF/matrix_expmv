@@ -1,7 +1,7 @@
 function dA = generate_rand_dA_by_taste(taste_input)
-    % Given the type type it generates the matrix of the shape
-    % of the appropriate class with a Montecarlo algoritm based on the
-    % function generate_rand_A
+    % Given the taste integer from 1 to 6 it generates the matrix of the 
+    % shape of the appropriate class with a Montecarlo algoritm based on
+    % the function generate_rand_A
     
     if taste_input == 6
         dA = generate_se2_dA();

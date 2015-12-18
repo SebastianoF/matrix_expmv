@@ -15,6 +15,8 @@ function face = weighted_dice(faces, weight)
     for j=1:num_weight
        cumulative_weight(j+1) = sum(weight(1:j));
     end
+    % use cumsum matlab function
+
     rand_w = unifrnd(0, cumulative_weight(end));
     for j=1:num_weight
        if rand_w >= cumulative_weight(j) && rand_w < cumulative_weight(j+1)

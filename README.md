@@ -55,8 +55,24 @@ a range of values where we want the rotation (theta) and the translation
 (tx, ty) to belong to.
 
 The function generate_se2, generates elements in the particular case of 
-class 4 which are also elements of the Lie algebra se2.
+taste 4 which are also elements of the Lie algebra se2.
 
+----
+
+For more than 2-dimensional problem we can not classify matrices with the 
+previous 6 tastes straightforwardly. We used instead a classification with 
+three tastes: 
+
+Taste 'neg'
+If all the eigenvalues, both real or complex, have negative or zero real 
+part. 
+
+Taste 'pos'
+If all the eigenvalues, both real or complex, have positive real part. 
+
+Taste 'mix'
+If all the eigenvalues, both real or complex, have bot positive and 
+negative real part.
 
 ----
 Bibliography:
