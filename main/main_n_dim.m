@@ -14,7 +14,6 @@ directly expm(dA)*v than the same with one of the selected methods.
 
 %}
 
-
 clear
 close all
 clc

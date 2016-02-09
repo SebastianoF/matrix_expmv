@@ -19,7 +19,7 @@ where
 
 dA = [a, b, alpha;
       c, d, beta;
-      0, 0, 0]
+      0, 0, 1]
 
 is the associated matrix.
 The exponential map of dA, among other things, solves the ode.
