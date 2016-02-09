@@ -1,14 +1,16 @@
 Matlab 2014b
 
-=======================================================
+-------------
+
 ## Exponential map of the square matrix dA times a vector
-=======================================================
+
+-------------
 
 Aim of this project is to compare some expmv methods collected in the 
 folder expmv_methods, for the 4 different classes of 
 stationary linear ordinary differential equations.
 
-----------------------------------------------------------------------
+---------------------------------------------------------
 
 
 Matrices are defined by a 2x2 Stationary linear ODE system
@@ -25,9 +27,10 @@ dA = [a, b, alpha;
 is the associated matrix in homogeneous coordinates.
 The exponential map of dA, among other things, solves the ode.
 
+-------------
+
 The matrices of the kind dA can be classifed according to 6 types (called
 "tastes" to avoid confusions) according to the 2 eigenvalues of dA
-
 
 Taste 1:
 real eigenvalues with the same signs, positive (unstable node).
@@ -77,7 +80,7 @@ negative real part.
 
 ----
 
-# Bibliography:
+## Bibliography:
 
 Hoppenstead 
 "Analysis and simulation of chaotic system" (ch. 2.1)
@@ -94,7 +97,7 @@ Moler, Van Loan
 
 ----
 
-# Methods compared:
+## Methods compared:
 
 'exp_leja': 
 http://uk.mathworks.com/matlabcentral/fileexchange/44039-matrix-exponential-times-a-vector/content/expleja.m
