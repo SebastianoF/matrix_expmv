@@ -1,3 +1,6 @@
 *.m~
 *_old.m
 *.mat
+homographies
+lib
+stats
