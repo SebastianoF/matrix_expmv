@@ -81,7 +81,8 @@ negative real part.
 + [phipm](http://www1.maths.leeds.ac.uk/~jitse/phipm.m) \*
 
 m-files have been copy-pasted in the `expmv_method` folder, in date 13-Dec-2015.
-\* little modifications from the original version to make it version compatible.
+
+(\*) Little modifications from the originally downloaded code to make it version compatible.
 
 ## Acknowledgments
 
