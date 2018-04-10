@@ -4,11 +4,17 @@ Matlab 2016a
 # matrix_expmv: exponential map of the square matrix dA times a vector
 
 
-Aim of this project is to compare a set of expmv methods collected in the 
-folder expmv_methods from the web, for a classification of 6 
-different stationary linear ordinary differential equations.
+Research code aimed at comparing a set of numerical methods to compare the exponential of a matrix times a vector without explicitly compute the exponential of the matrix. Selected methods are the state of the art, and they are applied at 6 different classes (or tastes) of stationary linear ordinary differential equations.
 
-# Introduction
+## Where to start
+
+Run the procedure `test/main_test` to run all the test in one go and reproduce the image below:
+
+![run_example](https://github.com/SebastianoF/matrix_expmv/blob/master/screenshots/test_output.jpg)
+
+## Not(at)ions
+
+### 2D case
 
 Matrices are defined by a 2x2 Stationary linear ODE system
 
@@ -47,6 +53,8 @@ a range of values where we want the rotation (theta) and the translation
 The function `generate_se2`, generates elements in the particular case of 
 taste 6 which are elements of the Lie algebra se2.
 
+### N-D case
+
 For problems with more than 2-dimensions we can not classify matrices with 
 the previous 6 tastes straightforwardly. We used instead a classification 
 with three 'string' tastes: 
@@ -60,30 +68,7 @@ part.
 negative real part.
 
 
-## Where to start
-
-Please run the procedure `test/main_test` to run all the test in one go and reproduce the image below:
-
-![run_example](https://github.com/SebastianoF/matrix_expmv/blob/master/screenshots/test_output.jpg)
-
-
-## Bibliography:
-
-+ For a classification of the linear stationary ode:
-Hoppenstead  "Analysis and simulation of chaotic system" (ch. 2.1)
-
-
-+ For the theoretical comparison of some of the selected methods:
-Caliari et al  "Comparison of various methods for computing the action of
-the matrix exponential"
-
-+ Milestone in the computation of the matrix exponential:
-Moler, Van Loan
-"nineteen dubious ways to compute the exponential of a matrix"
-
-
 ## Methods compared:
-
 
 + [exp_leja](http://uk.mathworks.com/matlabcentral/fileexchange/44039-matrix-exponential-times-a-vector/content/expleja.m)
 
@@ -101,4 +86,18 @@ m-files have been copy-pasted in the `expmv_method` folder, in date 13-Dec-2015.
 ## Acknowledgments
 
 The code was developed within the [GIFT-surg research project](http://www.gift-surg.ac.uk) UCL (UK), with the aim of prototyping the exponential of large stationary velocity fields arising in diffeomorphic medical image registration algorithms.
+
+## Bibliography:
+
++ For a classification of the linear stationary ode:
+[Hoppenstead  "Analysis and simulation of chaotic system" (ch. 2.1)](http://www.springer.com/gb/book/9780387989433)
+
++ For the theoretical comparison of some of the selected methods:
+[Caliari et al  "Comparison of various methods for computing the action of
+the matrix exponential"](http://profs.scienze.univr.it/~caliari/pdf/preCKOR13.pdf)
+
++ Milestone in the computation of the matrix exponential:
+[Moler, Van Loan
+"Nineteen dubious ways to compute the exponential of a matrix"](http://www.cs.cornell.edu/cv/researchpdf/19ways+.pdf)
+
 
