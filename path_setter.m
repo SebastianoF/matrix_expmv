@@ -1,4 +1,8 @@
-cd('your_path_to_software_here/matrix_expmv')
+
+here = mfilename('fullpath');
+root = fileparts(here);
+
+cd(root)
 
 addpath(pwd)
 addpath(fullfile(pwd, 'expmv_methods'))
