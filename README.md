@@ -24,8 +24,6 @@ dA = [a, b, alpha;
 is the associated matrix in homogeneous coordinates.
 The exponential map of dA, among other things, solves the ode.
 
--------------
-
 The matrices of the kind dA can be classifed according to 6 types (called
 "tastes" here) according to the 2 eigenvalues of dA
 
@@ -48,8 +46,6 @@ a range of values where we want the rotation (theta) and the translation
 
 The function `generate_se2`, generates elements in the particular case of 
 taste 6 which are elements of the Lie algebra se2.
-
-----
 
 For problems with more than 2-dimensions we can not classify matrices with 
 the previous 6 tastes straightforwardly. We used instead a classification 
@@ -88,23 +84,21 @@ Moler, Van Loan
 
 ## Methods compared:
 
-'exp_leja': 
-[http://uk.mathworks.com/matlabcentral/fileexchange/44039-matrix-exponential-times-a-vector/content/expleja.m][http://uk.mathworks.com/matlabcentral/fileexchange/44039-matrix-exponential-times-a-vector/content/expleja.m]
 
-'expmv':
-[http://www.mathworks.com/matlabcentral/fileexchange/29576-matrix-exponential-times-a-vector/content/expmv.m][http://www.mathworks.com/matlabcentral/fileexchange/29576-matrix-exponential-times-a-vector/content/expmv.m]
++ [exp_leja](http://uk.mathworks.com/matlabcentral/fileexchange/44039-matrix-exponential-times-a-vector/content/expleja.m)
 
-'expmvp': (little modifications from the original version) 
-[http://www1.maths.leeds.ac.uk/~jitse/expmvp.m][http://www1.maths.leeds.ac.uk/~jitse/expmvp.m]
++ [expmv](http://www.mathworks.com/matlabcentral/fileexchange/29576-matrix-exponential-times-a-vector/content/expmv.m)
 
-'phileja': 
-[http://uk.mathworks.com/matlabcentral/fileexchange/40949-meshfree-exponential-integrator/content/MExpInt2D/phileja.m][http://uk.mathworks.com/matlabcentral/fileexchange/40949-meshfree-exponential-integrator/content/MExpInt2D/phileja.m]
++ [expmvp](http://www1.maths.leeds.ac.uk/~jitse/expmvp.m) \* 
 
++ [phileja](http://uk.mathworks.com/matlabcentral/fileexchange/40949-meshfree-exponential-integrator/content/MExpInt2D/phileja.m)
 
-'phipm': (little modifications from the original version) 
-[http://www1.maths.leeds.ac.uk/~jitse/phipm.m][http://www1.maths.leeds.ac.uk/~jitse/phipm.m]
++ [phipm](http://www1.maths.leeds.ac.uk/~jitse/phipm.m) \*
+
+m-files have been copy-pasted in the `expmv_method` folder, in date 13-Dec-2015.
+\* little modifications from the original version to make it version compatible.
 
 ## Acknowledgments
 
-The code was developed within the [GIFT-surg research project][http://www.gift-surg.ac.uk] UCL (UK), with the aim of prototyping the exponential of large stationary velocity fields arising in diffeomorphic medical image registration algorithms.
+The code was developed within the [GIFT-surg research project](http://www.gift-surg.ac.uk) UCL (UK), with the aim of prototyping the exponential of large stationary velocity fields arising in diffeomorphic medical image registration algorithms.
 
